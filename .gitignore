@@ -1,0 +1,54 @@
+# ── macOS ────────────────────────────────────────────────
+.DS_Store
+._*
+
+# ── Secrets & environment ────────────────────────────────
+# Nunca versionar claves de Culqi/Niubiz, Supabase ni firmas de iOS.
+.env
+.env.*
+!.env.example
+*.p12
+*.pem
+*.cer
+*.mobileprovision
+*.keystore
+*.jks
+
+# ── iOS / Swift ──────────────────────────────────────────
+ios/**/DerivedData/
+ios/**/.build/
+ios/**/.swiftpm/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+Carthage/Build/
+Pods/
+
+# ── Android / Kotlin ─────────────────────────────────────
+android/**/build/
+android/.gradle/
+android/local.properties
+*.iml
+.idea/
+captures/
+
+# ── Web / Node ───────────────────────────────────────────
+node_modules/
+web/.next/
+web/out/
+web/.turbo/
+.vercel
+
+# ── Backend / Python ─────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ── Tooling caches ───────────────────────────────────────
+.atl/.skill-registry.cache.json
