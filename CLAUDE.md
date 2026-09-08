@@ -64,7 +64,91 @@ Funcionalidad del producto:
 - `users`: perfil y rol (`admin` / `customer`), enlazado a Supabase Auth
 ## Convenciones de código
  
-_(completar según se defina el proyecto: estilo de commits, linting, testing, estructura de carpetas)_
+### Ramas
+
+Formato `<tipo>/<issue?>-<slug>`, **todo en minúsculas**:
+
+```
+feat/12-tour-catalog
+fix/13-booking-past-dates
+chore/ci-path-filters          # sin issue: válido para cambios chicos
+```
+
+- Minúsculas siempre. El filesystem de macOS es case-insensitive: `FE/x` y `fe/x` colisionan en `.git/refs/heads/`.
+- El `<tipo>` usa el mismo vocabulario que los commits: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`.
+- El número es el del issue de GitHub y es **opcional** — se usa cuando el cambio merece seguimiento.
+  Nunca se lleva un contador a mano: GitHub asigna el número, no se tipea.
+- Las ramas viven horas o días y **se borran al mergear**. El registro no está en el nombre de la
+  rama (es un puntero de 41 bytes, sin historia propia): vive en el issue, el PR, el commit y el tag.
+
+### Flujo de trabajo
+
+1. *(Opcional)* Issue en GitHub → da el número
+2. `git switch -c feat/12-tour-catalog` desde `main` actualizado
+3. Commits chicos dentro de la rama
+4. `git push -u origin feat/12-tour-catalog`
+5. PR con `Closes #12` en el cuerpo → corre la CI
+6. **Squash merge** a `main` → se borra la rama
+
+No se commitea directo a `main`. La CI corre en el PR, no después de romper `main`.
+
+### Después del merge, el ciclo se bifurca
+
+| Entregable | Qué pasa al llegar a `main` |
+|---|---|
+| `backend/`, `web/` | CI → deploy. Fin. Revertible en minutos. |
+| `ios/`, `android/` | `main` es sala de espera. Publicar es un acto aparte y deliberado. |
+
+Una versión que ya está instalada en el teléfono de alguien **no se revierte**. De ahí que el
+dominio de las apps se desarrolle con TDD estricto: el costo de equivocarse no es simétrico.
+
+### Ramas de release
+
+No existen hasta que hay algo que congelar. Nacen el día que se buildea el binario que se manda a
+review, desde el commit exacto que se manda:
+
+```
+git switch -c release/ios-1.0 <sha>
+```
+
+Su única razón de ser es permitir parchear una versión congelada mientras `main` avanza. Crearlas
+antes las convierte en un `develop` disfrazado que hay que sincronizar a mano.
+
+### Commits
+
+Conventional commits, **en inglés**, sin atribución a herramientas de IA:
+
+```
+feat(ios): add tour list view
+fix(backend): reject bookings for sold-out tours
+chore(ci): add path filters to macOS workflow
+```
+
+- El `<scope>` es el área del monorepo: `ios`, `android`, `web`, `backend`, `ci`, `docs`.
+- Un commit cuenta UNA historia. Si no se puede revertir solo sin romper otra cosa, son dos commits.
+- Una rama puede tocar `backend` e `ios` a la vez: es justamente lo que el monorepo permite hacer
+  atómico cuando cambia el contrato de la API.
+
+### Tags
+
+Prefijados por entregable, porque cada uno versiona a su propio ritmo:
+
+```
+ios/v1.0.0    android/v1.0.0    backend/v3.4.0
+```
+
+Un tag sin prefijo (`v1.0.0`) no significa nada en un monorepo.
+
+### Dónde vive cada cosa
+
+| Documento | Qué contiene | Cambia |
+|---|---|---|
+| `specs/constitution.md` | Principios — el POR QUÉ | Casi nunca, y con justificación |
+| `CLAUDE.md` (esta sección) | Convenciones — el CÓMO | Sin drama |
+| Hooks y CI | Lo que se hace cumplir | — |
+
+Una convención documentada pero no enforced decae. Estas reglas deben terminar en un hook
+(`commitlint`) y en la CI, no solo en este archivo.
  
 ## Comandos
  
