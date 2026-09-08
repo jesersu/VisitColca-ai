@@ -71,19 +71,22 @@ Formato `<tipo>/<issue?>-<slug>`, **todo en minúsculas**:
 ```
 feat/12-tour-catalog
 fix/13-booking-past-dates
-chore/ci-path-filters          # sin issue: válido para cambios chicos
+chore/ci-path-filters          # sin número: solo válido en `chore` y `docs`
 ```
 
 - Minúsculas siempre. El filesystem de macOS es case-insensitive: `FE/x` y `fe/x` colisionan en `.git/refs/heads/`.
 - El `<tipo>` usa el mismo vocabulario que los commits: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`.
-- El número es el del issue de GitHub y es **opcional** — se usa cuando el cambio merece seguimiento.
+- El número es el del issue de GitHub, y su exigencia depende del tipo:
+  - **`feat` y `fix` → issue obligatorio.** Cambian el comportamiento del producto. En seis meses
+    alguien va a preguntar *por qué* funciona así, y el diff no contesta eso — el issue sí.
+  - **`chore` y `docs` → opcional.** No cambian comportamiento: el diff ya es la explicación completa.
   Nunca se lleva un contador a mano: GitHub asigna el número, no se tipea.
 - Las ramas viven horas o días y **se borran al mergear**. El registro no está en el nombre de la
   rama (es un puntero de 41 bytes, sin historia propia): vive en el issue, el PR, el commit y el tag.
 
 ### Flujo de trabajo
 
-1. *(Opcional)* Issue en GitHub → da el número
+1. Issue en GitHub → da el número *(obligatorio en `feat` y `fix`, opcional en `chore` y `docs`)*
 2. `git switch -c feat/12-tour-catalog` desde `main` actualizado
 3. Commits chicos dentro de la rama
 4. `git push -u origin feat/12-tour-catalog`
