@@ -64,6 +64,29 @@ Funcionalidad del producto:
 - `users`: perfil y rol (`admin` / `customer`), enlazado a Supabase Auth
 ## Convenciones de código
  
+### Issues y labels
+
+GitHub no ofrece *Issue Types* nativos en cuentas personales (es una función solo de
+organizaciones), así que el tipo de un issue se expresa con **labels**, en dos ejes:
+
+| Eje | Labels | Color |
+|---|---|---|
+| **type** | `type:feat` `type:fix` `type:chore` `type:docs` `type:spike` | Semántico: verde = nuevo, rojo = roto |
+| **scope** | `scope:ios` `scope:android` `scope:web` `scope:backend` `scope:ci` | Gris uniforme |
+
+El color transporta el eje `type`. El `scope` se lee por texto: `ios` no es semánticamente
+"mejor" que `backend`, así que darles colores distintos sería ruido.
+
+`type:spike` es el único que **no produce código**. Una investigación termina en una decisión
+escrita en el issue; si de ahí sale trabajo, se abre otro issue `type:feat` que enlaza al spike.
+
+Los labels por defecto que competían con este vocabulario (`bug`, `documentation`, `enhancement`)
+fueron eliminados: `bug` y `fix` son lo mismo con dos nombres.
+
+> **Ojo:** los labels viven en la configuración de GitHub, no en el repositorio. Un `git clone`
+> no los trae. Hasta que exista un `.github/labels.yml` sincronizado por CI, hay que recrearlos
+> a mano en cualquier fork.
+
 ### Ramas
 
 Formato `<tipo>/<issue?>-<slug>`, **todo en minúsculas**:
